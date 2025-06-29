@@ -1,0 +1,103 @@
+/* AfinarteStudio Color Palette */
+/* Extracted from logo.png */
+
+:root {
+  /* Primary Brand Colors */
+  --primary-gold: #e4a323;
+  --primary-gold-light: #ffb625;
+  --primary-gold-dark: #d4921f;
+  
+  /* Secondary Colors */
+  --secondary-dark: #1a1a1a;
+  --secondary-dark-alt: #2b2725;
+  --secondary-light: #f9f9f9;
+  --secondary-gray: #9c9c9c;
+  
+  /* Background Colors */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #f9f9f9;
+  --bg-white: #ffffff;
+  
+  /* Text Colors */
+  --text-primary: #f9f9f9;
+  --text-secondary: #1a1a1a;
+  --text-muted: #9c9c9c;
+  --text-accent: #e4a323;
+  
+  /* Gradient Colors */
+  --gradient-gold: linear-gradient(to bottom, #ffb625, #ffffff);
+  --gradient-gold-alt: linear-gradient(to bottom, #e4a323, #ffffff);
+  --gradient-light: linear-gradient(to bottom, #ffffff, rgba(43, 39, 37, 0));
+  
+  /* Interactive States */
+  --hover-gold: #f5b837;
+  --active-gold: #d09112;
+  --focus-gold: #e4a323;
+  
+  /* Border Colors */
+  --border-light: #9c9c9c;
+  --border-dark: #2b2725;
+  --border-accent: #e4a323;
+  
+  /* Shadow Colors */
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.25);
+  --shadow-dark: rgba(0, 0, 0, 0.5);
+  --shadow-gold: rgba(228, 163, 35, 0.3);
+}
+
+/* Color Classes for Easy Application */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-accent { color: var(--text-accent); }
+.text-gold { color: var(--primary-gold); }
+
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-white { background-color: var(--bg-white); }
+.bg-gold { background-color: var(--primary-gold); }
+.bg-gold-light { background-color: var(--primary-gold-light); }
+
+.border-light { border-color: var(--border-light); }
+.border-dark { border-color: var(--border-dark); }
+.border-accent { border-color: var(--border-accent); }
+
+.gradient-gold { background: var(--gradient-gold); }
+.gradient-gold-alt { background: var(--gradient-gold-alt); }
+.gradient-light { background: var(--gradient-light); }
+
+/* Button Color Variants */
+.btn-primary {
+  background-color: var(--primary-gold);
+  color: var(--bg-primary);
+  border: 1px solid var(--primary-gold);
+}
+
+.btn-primary:hover {
+  background-color: var(--hover-gold);
+  border-color: var(--hover-gold);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary-gold);
+  border: 1px solid var(--primary-gold);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-gold);
+  color: var(--bg-primary);
+}
+
+.btn-dark {
+  background-color: var(--secondary-dark);
+  color: var(--text-primary);
+  border: 1px solid var(--secondary-dark);
+}
+
+.btn-light {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}

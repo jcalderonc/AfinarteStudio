@@ -1,0 +1,98 @@
+<div class="page-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="main-card">
+          <!-- Logo y título -->
+          <div class="text-center mb-4">
+            <img src="assets/images/logo.png" alt="{{sharedStrings.appName}} Logo" class="hero-logo mb-3">
+            <h1 class="h3 text-brand-gold mb-2">{{strings.title}}</h1>
+            <p class="text-light opacity-75">{{strings.subtitle}}</p>
+          </div>
+
+          <!-- Información de contacto -->
+          <div class="contact-info">
+            <div class="service-card mb-3">
+              <div class="service-card-body">
+                <h5 class="service-card-title">
+                  <i class="fas fa-phone me-2"></i>{{strings.phone.title}}
+                </h5>
+                <p class="service-card-text">{{strings.phone.description}}</p>
+                <a href="tel:{{strings.phone.number}}" class="contact-link">
+                  <i class="fas fa-phone me-2"></i>{{strings.phone.number}}
+                </a>
+              </div>
+            </div>
+
+            <div class="service-card mb-3">
+              <div class="service-card-body">
+                <h5 class="service-card-title">
+                  <i class="fas fa-envelope me-2"></i>{{strings.email.title}}
+                </h5>
+                <p class="service-card-text">{{strings.email.description}}</p>
+                <a href="mailto:{{strings.email.addressFull}}" class="contact-link">
+                  <i class="fas fa-envelope me-2"></i>{{strings.email.addressDisplay}}
+                </a>
+              </div>
+            </div>
+
+            <div class="service-card mb-4">
+              <div class="service-card-body">
+                <h5 class="service-card-title">
+                  <i class="fas fa-map-marker-alt me-2"></i>{{strings.location.title}}
+                </h5>
+                <p class="service-card-text">{{strings.location.description}}</p>
+                <div class="contact-link mb-3">
+                  <i class="fas fa-map-marker-alt me-2"></i>{{strings.location.address}}
+                </div>
+                
+                <!-- Mapa embebido de Google Maps -->
+                <div class="map-container mb-3">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3734.1234567890123!2d-89.5490533!3d21.0182999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDAxJzA2LjMiTiA4OcKwMzInNTYuNiJX!5e0!3m2!1ses!2smx!4v1640995200000!5m2!1ses!2smx"
+                    width="100%" 
+                    height="200" 
+                    style="border:0; border-radius: 0.75rem;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                  </iframe>
+                </div>
+                
+                <a href="{{strings.location.googleMapsUrl}}" target="_blank" class="btn btn-sm btn-outline-primary">
+                  <i class="fas fa-external-link-alt me-2"></i>Ver en Google Maps
+                </a>
+              </div>
+            </div>
+
+            
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="text-center">
+            <h4 class="text-brand-gold mb-3">
+           
+            </h4>
+            <div class="row justify-content-center">
+              <div class="row">
+                <a (click)="goToScheduler()" class="contact-link d-block">
+                  <i class="fas fa-calendar-check me-2"></i>
+                  {{strings.scheduleButton}}
+                </a>
+              </div>
+              <div class="row">
+                <a (click)="goToHome()" class="contact-link d-block">
+                  <i class="fas fa-home me-2"></i>
+                  {{sharedStrings.backToHome}}
+                </a>
+              </div>
+            </div>
+          </div>
+
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

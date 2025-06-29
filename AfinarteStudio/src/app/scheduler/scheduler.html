@@ -1,0 +1,158 @@
+<div class="page-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="main-card">
+          <!-- Logo y título -->
+          <div class="text-center mb-4">
+            <img src="assets/images/logo.png" alt="{{sharedStrings.appName}} Logo" class="hero-logo mb-3">
+            <h1 class="h3 text-brand-gold mb-2">{{strings.title}}</h1>
+            <p class="text-light opacity-75">{{strings.subtitle}}</p>
+          </div>
+
+          <!-- Formulario de agendamiento -->
+          <form class="scheduler-form" (ngSubmit)="onSubmit()" #schedulerForm="ngForm">
+            <div class="mb-3">
+              <label for="service" class="form-label text-light">
+                <i class="fas fa-music me-2"></i>{{strings.service}}
+              </label>
+              <select 
+                class="form-select form-select-lg bg-dark text-light border-secondary" 
+                id="service"
+                name="service"
+                [(ngModel)]="schedulerData.service"
+                #service="ngModel"
+                required>
+                <option value="">{{strings.placeholders.service}}</option>
+                <option value="piano-lessons">{{sharedStrings.services.pianoLessons}}</option>
+                <option value="guitar-lessons">{{sharedStrings.services.guitarLessons}}</option>
+                <option value="piano-tuning">{{sharedStrings.services.pianoTuningService}}</option>
+                <option value="music-production">{{sharedStrings.services.musicProduction}}</option>
+              </select>
+              <div *ngIf="service.invalid && service.touched" class="invalid-feedback d-block">
+                <small *ngIf="service.errors?.['required']">{{sharedStrings.validation.serviceRequired}}</small>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="date" class="form-label text-light">
+                  <i class="fas fa-calendar me-2"></i>{{strings.date}}
+                </label>
+                <div class="date-input-container">
+                  <input 
+                    type="date" 
+                    class="form-control form-control-lg bg-dark text-light border-secondary" 
+                    id="date"
+                    name="date"
+                    [(ngModel)]="schedulerData.date"
+                    #date="ngModel"
+                    [min]="minDate"
+                    required>
+                </div>
+                <div *ngIf="date.invalid && date.touched" class="invalid-feedback d-block">
+                  <small *ngIf="date.errors?.['required']">{{strings.validation.dateRequired}}</small>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="time" class="form-label text-light">
+                  <i class="fas fa-clock me-2"></i>{{strings.time}}
+                </label>
+                <select 
+                  class="form-select form-select-lg bg-dark text-light border-secondary" 
+                  id="time"
+                  name="time"
+                  [(ngModel)]="schedulerData.time"
+                  #time="ngModel"
+                  required>
+                  <option value="">{{strings.placeholders.time}}</option>
+                  <option value="09:00">09:00</option>
+                  <option value="10:00">10:00</option>
+                  <option value="11:00">11:00</option>
+                  <option value="14:00">14:00</option>
+                  <option value="15:00">15:00</option>
+                  <option value="16:00">16:00</option>
+                  <option value="17:00">17:00</option>
+                </select>
+                <div *ngIf="time.invalid && time.touched" class="invalid-feedback d-block">
+                  <small *ngIf="time.errors?.['required']">{{strings.validation.timeRequired}}</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="name" class="form-label text-light">
+                <i class="fas fa-user me-2"></i>{{strings.name}}
+              </label>
+              <input 
+                type="text" 
+                class="form-control form-control-lg bg-dark text-light border-secondary" 
+                id="name"
+                name="name"
+                [(ngModel)]="schedulerData.name"
+                #name="ngModel"
+                [placeholder]="sharedStrings.placeholders.name"
+                required>
+              <div *ngIf="name.invalid && name.touched" class="invalid-feedback d-block">
+                <small *ngIf="name.errors?.['required']">{{sharedStrings.validation.nameRequired}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label text-light">
+                <i class="fas fa-envelope me-2"></i>{{strings.email}}
+              </label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg bg-dark text-light border-secondary" 
+                id="email"
+                name="email"
+                [(ngModel)]="schedulerData.email"
+                #email="ngModel"
+                [placeholder]="sharedStrings.placeholders.email"
+                required
+                email>
+              <div *ngIf="email.invalid && email.touched" class="invalid-feedback d-block">
+                <small *ngIf="email.errors?.['required']">{{sharedStrings.validation.emailRequired}}</small>
+                <small *ngIf="email.errors?.['email']">{{sharedStrings.validation.emailInvalid}}</small>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="message" class="form-label text-light">
+                <i class="fas fa-comment me-2"></i>{{strings.message}}
+              </label>
+              <textarea 
+                class="form-control form-control-lg bg-dark text-light border-secondary" 
+                id="message"
+                name="message"
+                [(ngModel)]="schedulerData.message"
+                #message="ngModel"
+                [placeholder]="sharedStrings.placeholders.message"
+                rows="4"></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg me-md-2"
+                [disabled]="schedulerForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i *ngIf="!isLoading" class="fas fa-calendar-check me-2"></i>
+                {{strings.scheduleButton}}
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-light btn-lg" 
+                (click)="goToHome()"
+                [disabled]="isLoading">
+                <i class="fas fa-home me-2"></i>{{sharedStrings.backToHome}}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

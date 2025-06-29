@@ -1,0 +1,94 @@
+<div class="page-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-7">
+        <div class="main-card">
+          <!-- Hero Section -->
+          <div class="text-center mb-4">
+            <img src="assets/images/logo.png" alt="{{sharedStrings.appName}} Logo" class="hero-logo mb-3">
+            <h1 class="h3 text-brand-gold mb-2">
+              {{strings.welcome}}
+            </h1>
+            <p class="text-light opacity-75 mb-4">
+              {{sharedStrings.tagline}}
+            </p>
+            <p class="text-light opacity-75 mb-4">
+              {{sharedStrings.since}}
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+              <a routerLink="/scheduler" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-calendar-plus me-2"></i>{{strings.scheduleButton}}
+              </a>
+              <a routerLink="/contact" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-envelope me-2"></i>{{strings.contactButton}}
+              </a>
+            </div>
+          </div>
+
+          <hr class="border-secondary my-4">
+
+          <!-- Services Section -->
+          <div class="mb-4">
+            <h2 class="h4 mb-4 text-center text-light">
+              <i class="fas fa-music me-2 text-brand-gold"></i>
+              {{strings.servicesTitle}}
+            </h2>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <div class="service-card h-100">
+                  <div class="service-icon">
+                    <i class="fas fa-music text-brand-gold"></i>
+                  </div>
+                  <h5 class="service-title">{{sharedStrings.services.musicClasses.title}}</h5>
+                  <p class="service-description small">{{sharedStrings.services.musicClasses.description}}</p>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="service-card h-100">
+                  <div class="service-icon">
+                    <i class="fas fa-tools text-brand-gold"></i>
+                  </div>
+                  <h5 class="service-title">{{sharedStrings.services.pianoTuning.title}}</h5>
+                  <p class="service-description small">{{sharedStrings.services.pianoTuning.description}}</p>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="service-card h-100">
+                  <div class="service-icon">
+                    <i class="fas fa-microphone text-brand-gold"></i>
+                  </div>
+                  <h5 class="service-title">{{sharedStrings.services.recording.title}}</h5>
+                  <p class="service-description small">{{sharedStrings.services.recording.description}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="border-secondary my-4">
+
+          <!-- Contact Info Section -->
+          <div class="text-center">
+            <h4 class="text-brand-gold mb-3">
+              <i class="fas fa-phone me-2"></i>
+              {{strings.getInTouch}}
+            </h4>
+            <div class="row justify-content-center">
+              <div class="row">
+                <a href="mailto:{{sharedStrings.emailFull}}" class="contact-link d-block">
+                  <i class="fas fa-envelope me-2"></i>
+                  {{sharedStrings.emailDisplay}}
+                </a>
+              </div>
+              <div class="row">
+                <a href="tel:{{sharedStrings.phone}}" class="contact-link d-block">
+                  <i class="fas fa-phone me-2"></i>
+                  {{sharedStrings.phone}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

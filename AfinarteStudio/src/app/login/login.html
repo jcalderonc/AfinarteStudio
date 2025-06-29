@@ -1,0 +1,121 @@
+<div class="page-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="main-card">
+          <!-- Logo y título -->
+          <div class="text-center mb-4">
+            <img src="assets/images/logo.png" alt="{{sharedStrings.appName}} Logo" class="hero-logo mb-3">
+            <h1 class="h3 text-brand-gold mb-2">{{strings.title}}</h1>
+            <p class="text-light opacity-75">{{strings.subtitle}}</p>
+          </div>
+
+          <!-- Formulario de login -->
+          <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="email" class="form-label text-light">
+                <i class="fas fa-envelope me-2"></i>{{strings.email}}
+              </label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg bg-dark text-light border-secondary" 
+                id="email"
+                name="email"
+                [(ngModel)]="loginData.email"
+                #email="ngModel"
+                [placeholder]="sharedStrings.placeholders.email"
+                required
+                email>
+              <div *ngIf="email.invalid && email.touched" class="invalid-feedback d-block">
+                <small *ngIf="email.errors?.['required']">{{sharedStrings.validation.emailRequired}}</small>
+                <small *ngIf="email.errors?.['email']">{{sharedStrings.validation.emailInvalid}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label text-light">
+                <i class="fas fa-lock me-2"></i>{{strings.password}}
+              </label>
+              <div class="input-group">
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control form-control-lg bg-dark text-light border-secondary" 
+                  id="password"
+                  name="password"
+                  [(ngModel)]="loginData.password"
+                  #password="ngModel"
+                  [placeholder]="strings.placeholders.password"
+                  required
+                  minlength="6">
+                <button 
+                  class="btn btn-outline-secondary" 
+                  type="button" 
+                  (click)="togglePasswordVisibility()">
+                  <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="password.invalid && password.touched" class="invalid-feedback d-block">
+                <small *ngIf="password.errors?.['required']">{{sharedStrings.validation.passwordRequired}}</small>
+                <small *ngIf="password.errors?.['minlength']">{{strings.validation.passwordMinLength}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3 form-check">
+              <input 
+                type="checkbox" 
+                class="form-check-input" 
+                id="rememberMe"
+                name="rememberMe"
+                [(ngModel)]="loginData.rememberMe">
+              <label class="form-check-label text-light" for="rememberMe">
+                {{strings.rememberMe}}
+              </label>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <!-- Mensaje de éxito -->
+            <div *ngIf="successMessage" class="alert alert-success" role="alert">
+              <i class="fas fa-check-circle me-2"></i>
+              {{ successMessage }}
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg"
+                [disabled]="loginForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i *ngIf="!isLoading" class="fas fa-sign-in-alt me-2"></i>
+                {{ isLoading ? strings.loggingIn : strings.loginButton }}
+              </button>
+            </div>
+
+            <div class="text-center mb-3">
+              <a href="#" class="text-brand-gold text-decoration-none" (click)="onForgotPassword($event)">
+                {{strings.forgotPassword}}
+              </a>
+            </div>
+
+            <hr class="border-secondary">
+
+            <div class="text-center">
+              <p class="text-light mb-3">{{strings.noAccount}}</p>
+              <button 
+                type="button" 
+                class="btn btn-outline-primary"
+                (click)="onRegister()">
+                <i class="fas fa-user-plus me-2"></i>
+                {{strings.createAccount}}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

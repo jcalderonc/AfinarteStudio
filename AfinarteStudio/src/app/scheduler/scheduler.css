@@ -1,0 +1,160 @@
+/* Estilos personalizados para el input de fecha */
+.form-control[type="date"],
+.form-control[type="time"] {
+  position: relative;
+  background-color: var(--bs-dark) !important;
+  border: 2px solid var(--bs-secondary);
+  border-radius: 0.75rem;
+  color: var(--bs-light) !important;
+  transition: all 0.3s ease;
+  height: 3.5rem; /* Altura fija para igualar fecha y hora */
+  padding: 0.75rem 1rem;
+  line-height: 1.5;
+}
+
+.form-control[type="date"]:focus,
+.form-control[type="time"]:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+  background-color: var(--bs-dark) !important;
+}
+
+.form-control[type="date"]:hover,
+.form-control[type="time"]:hover {
+  border-color: #d4af37;
+}
+
+/* Intentar personalizar el calendario desplegable */
+.form-control[type="date"]::-webkit-calendar-picker-indicator {
+  background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.4rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 1;
+}
+
+.form-control[type="date"]::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, #b8941f 0%, #d4af37 100%);
+}
+
+/* Mejorar el contraste y legibilidad del input */
+.form-control[type="date"] {
+  position: relative;
+  color: #ffffff !important;
+  background-color: #212529 !important;
+}
+
+.form-control[type="date"]::-webkit-datetime-edit {
+  color: #ffffff;
+  padding: 0;
+}
+
+.form-control[type="date"]::-webkit-datetime-edit-text {
+  color: #d4af37;
+  font-weight: 500;
+  padding: 0 0.25rem;
+}
+
+.form-control[type="date"]::-webkit-datetime-edit-month-field,
+.form-control[type="date"]::-webkit-datetime-edit-day-field,
+.form-control[type="date"]::-webkit-datetime-edit-year-field {
+  color: #ffffff;
+  background-color: transparent;
+  padding: 0.1rem 0.3rem;
+  margin: 0.1rem;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+}
+
+.form-control[type="date"]::-webkit-datetime-edit-month-field:focus,
+.form-control[type="date"]::-webkit-datetime-edit-day-field:focus,
+.form-control[type="date"]::-webkit-datetime-edit-year-field:focus {
+  background-color: rgba(212, 175, 55, 0.15);
+  border-color: #d4af37;
+  outline: none;
+}
+
+/* Personalizar texto del placeholder */
+.form-control[type="date"]:invalid,
+.form-control[type="time"]:invalid {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-control[type="date"]:valid,
+.form-control[type="time"]:valid {
+  color: var(--bs-light);
+}
+
+/* Mejorar la apariencia en Firefox */
+.form-control[type="date"]::-moz-focus-inner,
+.form-control[type="time"]::-moz-focus-inner {
+  border: 0;
+}
+
+/* Estilos para el contenedor del input */
+.date-input-container,
+.time-input-container {
+  position: relative;
+  height: 3.5rem; /* Contenedor con altura fija */
+}
+
+/* Mejorar el contraste del texto seleccionado */
+.form-control[type="date"]::-webkit-datetime-edit-text,
+.form-control[type="time"]::-webkit-datetime-edit-text {
+  color: var(--bs-light);
+}
+
+.form-control[type="date"]::-webkit-datetime-edit-month-field,
+.form-control[type="date"]::-webkit-datetime-edit-day-field,
+.form-control[type="date"]::-webkit-datetime-edit-year-field,
+.form-control[type="time"]::-webkit-datetime-edit-hour-field,
+.form-control[type="time"]::-webkit-datetime-edit-minute-field {
+  color: var(--bs-light);
+  background-color: transparent;
+  padding: 0.125rem 0.25rem;
+  margin: 0.125rem;
+  border-radius: 0.25rem;
+}
+
+.form-control[type="date"]::-webkit-datetime-edit-month-field:focus,
+.form-control[type="date"]::-webkit-datetime-edit-day-field:focus,
+.form-control[type="date"]::-webkit-datetime-edit-year-field:focus,
+.form-control[type="time"]::-webkit-datetime-edit-hour-field:focus,
+.form-control[type="time"]::-webkit-datetime-edit-minute-field:focus {
+  background-color: rgba(212, 175, 55, 0.2);
+  border-radius: 0.25rem;
+}
+
+/* Igualar alturas de los selects con los inputs de fecha */
+.form-select.form-select-lg {
+  height: 3.5rem !important;
+  padding: 0.75rem 1rem;
+  line-height: 1.5;
+  border: 2px solid var(--bs-secondary);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.form-select.form-select-lg:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+}
+
+.form-select.form-select-lg:hover {
+  border-color: #d4af37;
+}
+
+/* Asegurar que todos los form-control-lg tengan la misma altura */
+.form-control-lg {
+  height: 3.5rem !important;
+  padding: 0.75rem 1rem !important;
+  line-height: 1.5 !important;
+}

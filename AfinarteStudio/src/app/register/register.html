@@ -1,0 +1,204 @@
+<div class="page-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="main-card">
+          <!-- Logo y título -->
+          <div class="text-center mb-4">
+            <img src="assets/images/logo.png" alt="{{sharedStrings.appName}} Logo" class="hero-logo mb-3">
+            <h1 class="h3 text-brand-gold mb-2">{{strings.title}}</h1>
+            <p class="text-light opacity-75">{{strings.subtitle}}</p>
+          </div>
+
+          <!-- Formulario de registro -->
+          <form class="register-form" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label text-light">
+                  <i class="fas fa-user me-2"></i>{{strings.firstName}}
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg bg-dark text-light border-secondary" 
+                  id="firstName"
+                  name="firstName"
+                  [(ngModel)]="registerData.firstName"
+                  #firstName="ngModel"
+                  [placeholder]="strings.placeholders.firstName"
+                  required>
+                <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback d-block">
+                  <small *ngIf="firstName.errors?.['required']">{{strings.validation.firstNameRequired}}</small>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label text-light">
+                  <i class="fas fa-user me-2"></i>{{strings.lastName}}
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg bg-dark text-light border-secondary" 
+                  id="lastName"
+                  name="lastName"
+                  [(ngModel)]="registerData.lastName"
+                  #lastName="ngModel"
+                  [placeholder]="strings.placeholders.lastName"
+                  required>
+                <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback d-block">
+                  <small *ngIf="lastName.errors?.['required']">{{strings.validation.lastNameRequired}}</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label text-light">
+                <i class="fas fa-envelope me-2"></i>{{strings.email}}
+              </label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg bg-dark text-light border-secondary" 
+                id="email"
+                name="email"
+                [(ngModel)]="registerData.email"
+                #email="ngModel"
+                [placeholder]="sharedStrings.placeholders.email"
+                required
+                email>
+              <div *ngIf="email.invalid && email.touched" class="invalid-feedback d-block">
+                <small *ngIf="email.errors?.['required']">{{sharedStrings.validation.emailRequired}}</small>
+                <small *ngIf="email.errors?.['email']">{{sharedStrings.validation.emailInvalid}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phone" class="form-label text-light">
+                <i class="fas fa-phone me-2"></i>{{strings.phone}}
+              </label>
+              <input 
+                type="tel" 
+                class="form-control form-control-lg bg-dark text-light border-secondary" 
+                id="phone"
+                name="phone"
+                [(ngModel)]="registerData.phone"
+                #phone="ngModel"
+                [placeholder]="sharedStrings.placeholders.phone"
+                required>
+              <div *ngIf="phone.invalid && phone.touched" class="invalid-feedback d-block">
+                <small *ngIf="phone.errors?.['required']">{{sharedStrings.validation.phoneRequired}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label text-light">
+                <i class="fas fa-lock me-2"></i>{{strings.password}}
+              </label>
+              <div class="input-group">
+                <input 
+                  [type]="showPassword ? 'text' : 'password'" 
+                  class="form-control form-control-lg bg-dark text-light border-secondary" 
+                  id="password"
+                  name="password"
+                  [(ngModel)]="registerData.password"
+                  #password="ngModel"
+                  [placeholder]="strings.placeholders.password"
+                  required
+                  minlength="8">
+                <button 
+                  class="btn btn-outline-secondary" 
+                  type="button" 
+                  (click)="togglePasswordVisibility()">
+                  <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="password.invalid && password.touched" class="invalid-feedback d-block">
+                <small *ngIf="password.errors?.['required']">{{sharedStrings.validation.passwordRequired}}</small>
+                <small *ngIf="password.errors?.['minlength']">{{strings.validation.passwordMinLength}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label text-light">
+                <i class="fas fa-lock me-2"></i>{{strings.confirmPassword}}
+              </label>
+              <div class="input-group">
+                <input 
+                  [type]="showConfirmPassword ? 'text' : 'password'" 
+                  class="form-control form-control-lg bg-dark text-light border-secondary" 
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  [(ngModel)]="registerData.confirmPassword"
+                  #confirmPassword="ngModel"
+                  [placeholder]="strings.placeholders.confirmPassword"
+                  required>
+                <button 
+                  class="btn btn-outline-secondary" 
+                  type="button" 
+                  (click)="toggleConfirmPasswordVisibility()">
+                  <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </button>
+              </div>
+              <div *ngIf="confirmPassword.invalid && confirmPassword.touched" class="invalid-feedback d-block">
+                <small *ngIf="confirmPassword.errors?.['required']">{{strings.validation.confirmPasswordRequired}}</small>
+              </div>
+              <div *ngIf="registerData.confirmPassword && registerData.password !== registerData.confirmPassword" class="invalid-feedback d-block">
+                <small>{{strings.validation.passwordMismatch}}</small>
+              </div>
+            </div>
+
+            <div class="mb-3 form-check">
+              <input 
+                type="checkbox" 
+                class="form-check-input" 
+                id="acceptTerms"
+                name="acceptTerms"
+                [(ngModel)]="registerData.acceptTerms"
+                #acceptTerms="ngModel"
+                required>
+              <label class="form-check-label text-light" for="acceptTerms">
+                {{strings.terms}}
+              </label>
+              <div *ngIf="acceptTerms.invalid && acceptTerms.touched" class="invalid-feedback d-block">
+                <small>{{strings.validation.termsRequired}}</small>
+              </div>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <!-- Mensaje de éxito -->
+            <div *ngIf="successMessage" class="alert alert-success" role="alert">
+              <i class="fas fa-check-circle me-2"></i>
+              {{ successMessage }}
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg"
+                [disabled]="registerForm.invalid || isLoading || registerData.password !== registerData.confirmPassword">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i *ngIf="!isLoading" class="fas fa-user-plus me-2"></i>
+                {{ isLoading ? strings.registering : strings.registerButton }}
+              </button>
+            </div>
+
+            <hr class="border-secondary">
+
+            <div class="text-center">
+              <p class="text-light mb-3">{{strings.hasAccount}}</p>
+              <button 
+                type="button" 
+                class="btn btn-outline-primary"
+                (click)="onLogin()">
+                <i class="fas fa-sign-in-alt me-2"></i>
+                {{strings.loginLink}}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+// AfinarteStudio SCSS Color Variables
+// Extracted from logo.png
+
+// Primary Brand Colors
+$primary-gold: #e4a323;
+$primary-gold-light: #ffb625;
+$primary-gold-dark: #d4921f;
+
+// Secondary Colors
+$secondary-dark: #1a1a1a;
+$secondary-dark-alt: #2b2725;
+$secondary-light: #f9f9f9;
+$secondary-gray: #9c9c9c;
+
+// Background Colors
+$bg-primary: #1a1a1a;
+$bg-secondary: #f9f9f9;
+$bg-white: #ffffff;
+
+// Text Colors
+$text-primary: #f9f9f9;
+$text-secondary: #1a1a1a;
+$text-muted: #9c9c9c;
+$text-accent: #e4a323;
+
+// Interactive States
+$hover-gold: #f5b837;
+$active-gold: #d09112;
+$focus-gold: #e4a323;
+
+// Border Colors
+$border-light: #9c9c9c;
+$border-dark: #2b2725;
+$border-accent: #e4a323;
+
+// Shadow Colors
+$shadow-light: rgba(0, 0, 0, 0.1);
+$shadow-medium: rgba(0, 0, 0, 0.25);
+$shadow-dark: rgba(0, 0, 0, 0.5);
+$shadow-gold: rgba(228, 163, 35, 0.3);
+
+// Gradients
+$gradient-gold: linear-gradient(to bottom, $primary-gold-light, $bg-white);
+$gradient-gold-alt: linear-gradient(to bottom, $primary-gold, $bg-white);
+$gradient-light: linear-gradient(to bottom, $bg-white, rgba($secondary-dark-alt, 0));
+
+// Color Maps for easier iteration
+$brand-colors: (
+  'primary-gold': $primary-gold,
+  'primary-gold-light': $primary-gold-light,
+  'primary-gold-dark': $primary-gold-dark,
+  'secondary-dark': $secondary-dark,
+  'secondary-light': $secondary-light,
+  'secondary-gray': $secondary-gray,
+);
+
+$background-colors: (
+  'primary': $bg-primary,
+  'secondary': $bg-secondary,
+  'white': $bg-white,
+);
+
+$text-colors: (
+  'primary': $text-primary,
+  'secondary': $text-secondary,
+  'muted': $text-muted,
+  'accent': $text-accent,
+);
+
+// Mixins for common color patterns
+@mixin gold-button {
+  background-color: $primary-gold;
+  color: $bg-primary;
+  border: 1px solid $primary-gold;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: $hover-gold;
+    border-color: $hover-gold;
+    box-shadow: 0 4px 8px $shadow-gold;
+  }
+  
+  &:active {
+    background-color: $active-gold;
+    border-color: $active-gold;
+  }
+  
+  &:focus {
+    outline: 2px solid $focus-gold;
+    outline-offset: 2px;
+  }
+}
+
+@mixin gold-text-gradient {
+  background: $gradient-gold;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin card-shadow {
+  box-shadow: 0 2px 4px $shadow-light,
+              0 8px 16px $shadow-medium;
+}
+
+@mixin gold-accent-border {
+  border: 2px solid $primary-gold;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: $gradient-gold;
+    border-radius: inherit;
+    z-index: -1;
+  }
+}
+
+// Utility functions
+@function get-color($color-name) {
+  @if map-has-key($brand-colors, $color-name) {
+    @return map-get($brand-colors, $color-name);
+  }
+  @warn "Color '#{$color-name}' not found in $brand-colors.";
+  @return null;
+}
+
+@function gold-opacity($opacity) {
+  @return rgba($primary-gold, $opacity);
+}
+
+@function dark-opacity($opacity) {
+  @return rgba($secondary-dark, $opacity);
+}

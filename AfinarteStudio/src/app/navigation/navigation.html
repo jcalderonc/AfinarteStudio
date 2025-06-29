@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-brand-dark sticky-top border-bottom border-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/home">
+      <img src="assets/images/logo.png" alt="{{sharedStrings.appName}} Logo" width="40" height="40" class="me-2">
+      <span class="text-brand-gold fw-bold">{{sharedStrings.appName}}</span>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" routerLink="/home" routerLinkActive="active text-brand-gold">
+          {{strings.home}}
+        </a>
+        <a class="nav-link" routerLink="/scheduler" routerLinkActive="active text-brand-gold">
+          {{strings.scheduler}}
+        </a>
+        <a class="nav-link" routerLink="/contact" routerLinkActive="active text-brand-gold">
+          {{strings.contact}}
+        </a>
+        <a class="nav-link" routerLink="/login" routerLinkActive="active text-brand-gold">
+          {{strings.login}}
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

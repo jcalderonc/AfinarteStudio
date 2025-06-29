@@ -1,0 +1,23 @@
+{
+  "name": "AfinarteStudio - Estudio de Grabación & Clases de Música",
+  "short_name": "AfinarteStudio",
+  "description": "Estudio profesional de grabación y clases de música en Mérida, Yucatán",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#d4af37",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Fondo oscuro con borde dorado -->
+  <rect width="32" height="32" fill="#1a1a1a" stroke="#d4af37" stroke-width="1" rx="4"/>
+  
+  <!-- Teclas blancas del piano (más grandes y visibles) -->
+  <rect x="4" y="8" width="4" height="16" fill="#ffffff" stroke="#d4af37" stroke-width="0.3"/>
+  <rect x="9" y="8" width="4" height="16" fill="#ffffff" stroke="#d4af37" stroke-width="0.3"/>
+  <rect x="14" y="8" width="4" height="16" fill="#ffffff" stroke="#d4af37" stroke-width="0.3"/>
+  <rect x="19" y="8" width="4" height="16" fill="#ffffff" stroke="#d4af37" stroke-width="0.3"/>
+  <rect x="24" y="8" width="4" height="16" fill="#ffffff" stroke="#d4af37" stroke-width="0.3"/>
+  
+  <!-- Teclas negras del piano -->
+  <rect x="6" y="8" width="2.5" height="10" fill="#2a2a2a"/>
+  <rect x="11" y="8" width="2.5" height="10" fill="#2a2a2a"/>
+  <rect x="16" y="8" width="2.5" height="10" fill="#2a2a2a"/>
+  <rect x="21" y="8" width="2.5" height="10" fill="#2a2a2a"/>
+  
+  <!-- Nota musical decorativa -->
+  <circle cx="16" cy="3" r="1.5" fill="#d4af37"/>
+  <rect x="17" y="2.5" width="0.5" height="3" fill="#d4af37"/>
+  
+  <!-- Marca "A" de AfinarteStudio -->
+  <text x="16" y="29" text-anchor="middle" font-family="Arial, sans-serif" font-size="4" font-weight="bold" fill="#d4af37">A</text>
+</svg>

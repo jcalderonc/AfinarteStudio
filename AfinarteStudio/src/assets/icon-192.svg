@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <!-- Fondo oscuro con borde dorado -->
+  <rect width="192" height="192" fill="#1a1a1a" stroke="#d4af37" stroke-width="4" rx="24"/>
+  
+  <!-- Teclas blancas del piano -->
+  <rect x="24" y="48" width="24" height="96" fill="#ffffff" stroke="#d4af37" stroke-width="2"/>
+  <rect x="54" y="48" width="24" height="96" fill="#ffffff" stroke="#d4af37" stroke-width="2"/>
+  <rect x="84" y="48" width="24" height="96" fill="#ffffff" stroke="#d4af37" stroke-width="2"/>
+  <rect x="114" y="48" width="24" height="96" fill="#ffffff" stroke="#d4af37" stroke-width="2"/>
+  <rect x="144" y="48" width="24" height="96" fill="#ffffff" stroke="#d4af37" stroke-width="2"/>
+  
+  <!-- Teclas negras del piano -->
+  <rect x="36" y="48" width="15" height="60" fill="#2a2a2a"/>
+  <rect x="66" y="48" width="15" height="60" fill="#2a2a2a"/>
+  <rect x="96" y="48" width="15" height="60" fill="#2a2a2a"/>
+  <rect x="126" y="48" width="15" height="60" fill="#2a2a2a"/>
+  
+  <!-- Nota musical decorativa -->
+  <circle cx="96" cy="20" r="8" fill="#d4af37"/>
+  <rect x="102" y="16" width="3" height="16" fill="#d4af37"/>
+  <path d="M105 16 Q115 14 115 24" stroke="#d4af37" stroke-width="3" fill="none"/>
+  
+  <!-- Texto "AfinarteStudio" -->
+  <text x="96" y="172" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#d4af37">AfinarteStudio</text>
+</svg>

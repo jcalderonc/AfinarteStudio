@@ -1,0 +1,22 @@
+{
+  "name": "afinarte-studio-lambda",
+  "version": "1.0.0",
+  "description": "Lambda functions for Afinarte Studio authentication",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Build script here\"",
+    "deploy": "echo \"Deploy script here\""
+  },
+  "dependencies": {
+    "mongodb": "^6.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "aws-lambda": "^1.0.7"
+  },
+  "keywords": ["lambda", "auth", "mongodb", "jwt"],
+  "author": "",
+  "license": "ISC"
+}

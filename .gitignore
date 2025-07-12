@@ -1,0 +1,40 @@
+# ─────────────────────────────
+# 🌐 FRONTEND (Angular)
+# ─────────────────────────────
+/AfinarteStudio/dist/
+/AfinarteStudio/out-tsc/
+/AfinarteStudio/tmp/
+/AfinarteStudio/coverage/
+/AfinarteStudio/e2e/test-output/
+/AfinarteStudio/.angular/
+/AfinarteStudio/.angular-cli.json
+/AfinarteStudio/.ng/
+/AfinarteStudio/node_modules/
+/AfinarteStudio/package-lock.json
+/AfinarteStudio/yarn.lock
+/AfinarteStudio/.env
+/AfinarteStudio/*.tsbuildinfo
+
+# Logs (frontend)
+/AfinarteStudio/npm-debug.log*
+/AfinarteStudio/yarn-debug.log*
+/AfinarteStudio/yarn-error.log*
+
+# ─────────────────────────────
+# ⚙️ BACKEND (Lambda)
+# ─────────────────────────────
+/AfinarteStudioLambda/node_modules/
+/AfinarteStudioLambda/*.zip
+/AfinarteStudioLambda/.env
+/AfinarteStudioLambda/*.tsbuildinfo
+
+# Logs (backend)
+/AfinarteStudioLambda/npm-debug.log*
+/AfinarteStudioLambda/yarn-debug.log*
+/AfinarteStudioLambda/yarn-error.log*
+
+# ─────────────────────────────
+# 💻 Sistema operativo
+# ─────────────────────────────
+.DS_Store
+Thumbs.db

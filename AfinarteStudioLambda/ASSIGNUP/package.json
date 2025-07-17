@@ -1,0 +1,18 @@
+{
+  "name": "assignup-lambda",
+  "version": "1.0.0",
+  "description": "User registration Lambda function for Afinarte Studio",
+  "main": "index.mjs",
+  "type": "module",
+  "dependencies": {
+    "mongodb": "^6.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "scripts": {
+    "test": "node test-lambda.mjs",
+    "start": "node index.mjs"
+  },
+  "keywords": ["lambda", "mongodb", "registration", "signup"],
+  "author": "Afinarte Studio",
+  "license": "MIT"
+}

@@ -7,20 +7,18 @@ This directory contains the AWS Lambda function for user authentication using Mo
 From the **monorepo root directory** (`AfinarteStudioLambda/`), run:
 
 ```bash
-./deploy-asauth.sh
+./deploy-lambda.sh
 ```
 
-This will create the deployment package in the `deployments/` directory.
+This will create deployment packages for both ASAUTH and ASSIGNUP functions.
 
 ## What the Script Does
 
-The deployment script (`deploy-asauth.sh`) automates the entire deployment process:
+The deployment script (`deploy-lambda.sh`) automates the entire deployment process:
 
 1. **Clean up** - Removes old ZIP files from the `deployments/` directory
-2. **Update** - Copies the latest `index.mjs` to deployment directory
-3. **Verify** - Checks all required files and dependencies
-4. **Package** - Creates a timestamped ZIP file in the `deployments/` directory
-5. **Validate** - Confirms the package contains all necessary components
+2. **Package** - Creates timestamped ZIP files for both functions
+3. **Validate** - Confirms packages contain all necessary components
 
 ## Manual Deployment (if needed)
 

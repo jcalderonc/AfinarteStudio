@@ -6,18 +6,26 @@ Monorepo containing AWS Lambda functions for Afinarte Studio backend.
 
 ```
 AfinarteStudioLambda/          # Monorepo root
-├── package.json               # Shared dependencies
+├── package.json               # Shared dependencies  
 ├── package-lock.json          
 ├── node_modules/              # Shared modules
-├── deploy-asauth.sh           # ASAUTH deployment script
+├── deploy-lambda.sh           # Unified deployment script
 ├── deployments/               # Generated deployment packages
-│   └── ASAUTH-lambda-*.zip
+│   ├── ASAUTH-lambda-*.zip
+│   └── ASSIGNUP-lambda-*.zip
 ├── README.md
-└── ASAUTH/                    # Authentication Lambda function
+├── ASAUTH/                    # Authentication Lambda function
+│   ├── index.mjs              # Main handler
+│   ├── package.json           # Function dependencies
+│   ├── node_modules/          # Function modules
+│   ├── test-lambda.mjs        # Local testing
+│   └── README.md
+└── ASSIGNUP/                  # User registration Lambda function
     ├── index.mjs              # Main handler
-    ├── deployment/            # Deployment-ready files
-    │   ├── index.mjs
-    │   ├── package.json
+    ├── package.json           # Function dependencies
+    ├── node_modules/          # Function modules
+    ├── test-lambda.mjs        # Local testing
+    └── README.md
     │   ├── package-lock.json
     │   └── node_modules/
     ├── README.md
@@ -28,15 +36,35 @@ AfinarteStudioLambda/          # Monorepo root
 
 ### ASAUTH - Authentication Function
 
-AWS Lambda function for user authentication using MongoDB with plain password comparison.
+AWS Lambda function for user authentication using MongoDB with secure JWT token generation.
 
-#### Quick Deployment
+### ASSIGNUP - User Registration Function  
+
+AWS Lambda function for user registration using MongoDB with validation and duplicate checking.
+
+## Quick Deployment
+
+Deploy both functions with a single command:
 
 ```bash
-./deploy-asauth.sh
+./deploy-lambda.sh
 ```
 
-This creates a deployment package in `deployments/ASAUTH-lambda-[timestamp].zip`.
+This creates deployment packages in `deployments/`:
+- `ASAUTH-lambda-[timestamp].zip`
+- `ASSIGNUP-lambda-[timestamp].zip`
+
+## Local Testing
+
+Test each function locally:
+
+```bash
+# Test ASAUTH function
+cd ASAUTH && npm test
+
+# Test ASSIGNUP function  
+cd ASSIGNUP && npm test
+```
 
 #### API Endpoint
 

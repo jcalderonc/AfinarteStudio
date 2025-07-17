@@ -7,10 +7,6 @@ dotenv.config();
 // Environment variables
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://lambda:test@afinartestudio.czf6kai.mongodb.net/?retryWrites=true&w=majority&appName=AfinarteStudio';
 const DB_NAME = process.env.DB_NAME || 'afinarteStudio';
-const JWT_SECRET = process.env.JWT_SECRET || 'default-secret-key-change-in-production';
-// Database connection instance
-let dbClient = null;
-let database = null;
 
 let cachedClient = null;
 
@@ -50,9 +46,21 @@ const connectToDatabase = async () => {
   }
 };
 
+// Email validation function
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// Password validation function
+const isValidPassword = (password) => {
+  // At least 4 characters for now (can be made more strict later)
+  return password && password.length >= 4;
+};
+
 export const handler = async (event) => {
   try {
-    console.log('ASAUTH Lambda - User Authentication');
+    console.log('ASSIGNUP Lambda - User Registration');
     console.log('Lambda timeout should be at least 30 seconds');
 
     // Parse request body
@@ -87,10 +95,11 @@ export const handler = async (event) => {
       };
     }
 
-    // Extract email and password
-    const { email, password } = requestBody;
+    // Extract required fields matching the users collection schema
+    const { firstName, lastName, email, phone, password, acceptTerms } = requestBody;
     
-    if (!email || !password) {
+    // Validate required fields
+    if (!firstName || !lastName || !email || !phone || !password || acceptTerms !== true) {
       return {
         statusCode: 400,
         headers: {
@@ -99,12 +108,42 @@ export const handler = async (event) => {
         },
         body: JSON.stringify({
           success: false,
-          message: 'Email and password are required'
+          message: 'All fields are required: firstName, lastName, email, phone, password, acceptTerms (must be true)'
         })
       };
     }
 
-    console.log('Attempting to authenticate user:', email);
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({
+          success: false,
+          message: 'Invalid email format'
+        })
+      };
+    }
+
+    // Validate password strength
+    if (!isValidPassword(password)) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify({
+          success: false,
+          message: 'Password must be at least 4 characters long'
+        })
+      };
+    }
+
+    console.log('Creating new user account for:', email);
 
     // Connect to database
     const client = await Promise.race([
@@ -120,90 +159,75 @@ export const handler = async (event) => {
     const db = client.db(DB_NAME);
     const usersCollection = db.collection('users');
     
-    // Find user by email (case insensitive)
-    console.log('Searching for user in database...');
-    const user = await usersCollection.findOne({
+    // Check if user already exists (case insensitive email check)
+    console.log('Checking if user already exists...');
+    const existingUser = await usersCollection.findOne({
       email: email.toLowerCase()
     });
     
-    if (!user) {
-      console.log('User not found');
+    if (existingUser) {
+      console.log('User already exists');
       return {
-        statusCode: 401,
+        statusCode: 409,
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           success: false,
-          message: 'Invalid credentials'
+          message: 'User with this email already exists'
         })
       };
     }
     
-    console.log('User found, verifying password...');
+    console.log('User does not exist, creating new account...');
     
-    // Verify password (plain text comparison for now)
-    if (password !== user.password) {
-      console.log('Password verification failed');
+    // Create new user document matching the exact schema
+    const newUser = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.toLowerCase().trim(),
+      phone: phone.trim(),
+      password: password, // Plain text for now (same as existing user)
+      acceptTerms: true,
+      createdAt: new Date()
+    };
+    
+    // Insert the new user
+    const result = await usersCollection.insertOne(newUser);
+    
+    if (result.insertedId) {
+      console.log('User created successfully with ID:', result.insertedId);
+      
+      // Return success response (no sensitive data)
       return {
-        statusCode: 401,
+        statusCode: 201,
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
-          success: false,
-          message: 'Invalid credentials'
+          success: true,
+          message: `Welcome ${firstName}! Your account has been created successfully`,
+          data: {
+            user: {
+              id: result.insertedId.toString(),
+              firstName: newUser.firstName,
+              lastName: newUser.lastName,
+              email: newUser.email,
+              phone: newUser.phone,
+              createdAt: newUser.createdAt.toISOString()
+            },
+            registrationTime: new Date().toISOString()
+          }
         })
       };
+    } else {
+      throw new Error('Failed to create user account');
     }
-    
-    console.log('Password verified successfully');
-    
-    // Generate secure token using JWT_SECRET
-    const tokenData = {
-      userId: user._id.toString(),
-      email: user.email,
-      timestamp: Date.now()
-    };
-    
-    // Create secure token using JWT_SECRET for signing
-    const tokenString = JSON.stringify(tokenData);
-    const signature = Buffer.from(JWT_SECRET + tokenString).toString('base64');
-    const token = Buffer.from(tokenString).toString('base64') + '.' + signature;
-    
-    console.log('Authentication successful, returning user data');
-    
-    // Return success response with user data and token
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify({
-        success: true,
-        message: `Welcome ${user.firstName || user.name || 'User'}! Authentication successful`,
-        data: {
-          user: {
-            id: user._id.toString(),
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            name: user.name,
-            role: user.role || 'user',
-            createdAt: user.createdAt
-          },
-          token: token,
-          loginTime: new Date().toISOString(),
-          expiresIn: '24h' // Token validity period
-        }
-      })
-    };
 
   } catch (error) {
-    console.error('Error in authentication handler:', error);
+    console.error('Error in registration handler:', error);
     return {
       statusCode: 500,
       headers: {

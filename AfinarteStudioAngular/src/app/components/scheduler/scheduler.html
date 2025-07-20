@@ -1,0 +1,46 @@
+
+
+<div class="container">
+  <mat-card>
+    <mat-card-title>Genera una cita</mat-card-title>
+    <mat-card-subtitle>Haz clic sobre la fecha para crear tu cita</mat-card-subtitle>
+    <mat-card-content>
+      <div class="scheduler-controls">
+    <button mat-raised-button color="primary"
+      mwlCalendarPreviousView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="onViewDateChange()">
+      <mat-icon>chevron_left</mat-icon>
+      Anterior
+    </button>
+    <button mat-stroked-button color="accent"
+      mwlCalendarToday
+      [(viewDate)]="viewDate">
+      <mat-icon>today</mat-icon>
+      Hoy
+    </button>
+    <button mat-raised-button color="primary"
+      mwlCalendarNextView
+      [view]="view"
+      [(viewDate)]="viewDate"
+      (viewDateChange)="onViewDateChange()">
+      Siguiente
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+  </mat-card-content>
+</mat-card>
+
+
+
+  
+
+<mwl-calendar-week-view
+  [viewDate]="viewDate"
+  [events]="events"
+  (hourSegmentClicked)="handleHourClick($event)">
+</mwl-calendar-week-view>
+
+
+</div>

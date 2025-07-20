@@ -5,20 +5,19 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Environment variables
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://lambda:test@afinartestudio.czf6kai.mongodb.net/?retryWrites=true&w=majority&appName=AfinarteStudio';
-const DB_NAME = process.env.DB_NAME || 'afinarteStudio';
+const MONGODB_URI = process.env.MONGODB_URI;
+const DB_NAME = process.env.DB_NAME;
 
 let cachedClient = null;
 
 const connectToDatabase = async () => {
   if (cachedClient && cachedClient.topology && cachedClient.topology.isConnected()) {
-    console.log('Using cached MongoDB connection');
+
     return cachedClient;
   }
 
   try {
-    console.log('Creating new MongoDB connection...');
-    console.log('Connection URI (without password):', MONGODB_URI.replace(/\/\/.*:.*@/, '//***:***@'));
+   
     
     // Create a MongoClient with ServerApi version (official Atlas pattern)
     const client = new MongoClient(MONGODB_URI, {
@@ -29,18 +28,15 @@ const connectToDatabase = async () => {
       }
     });
     
-    console.log('Calling client.connect()...');
+    
     await client.connect();
-    console.log('Client.connect() completed');
+    
     
     cachedClient = client;
-    console.log('Connected to MongoDB successfully');
+    
     return client;
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    console.error('Error name:', error.name);
-    console.error('Error code:', error.code);
-    console.error('Error cause:', error.cause);
+    
     cachedClient = null; // Reset cache on error
     throw new Error(`Database connection failed: ${error.message}`);
   }
@@ -60,8 +56,6 @@ const isValidPassword = (password) => {
 
 export const handler = async (event) => {
   try {
-    console.log('ASSIGNUP Lambda - User Registration');
-    console.log('Lambda timeout should be at least 30 seconds');
 
     // Parse request body
     let requestBody;
@@ -69,10 +63,6 @@ export const handler = async (event) => {
       if (!event.body) {
         return {
           statusCode: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          },
           body: JSON.stringify({
             success: false,
             message: 'Request body is required'
@@ -84,10 +74,6 @@ export const handler = async (event) => {
     } catch (error) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Invalid JSON in request body'
@@ -102,10 +88,6 @@ export const handler = async (event) => {
     if (!firstName || !lastName || !email || !phone || !password || acceptTerms !== true) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'All fields are required: firstName, lastName, email, phone, password, acceptTerms (must be true)'
@@ -117,10 +99,6 @@ export const handler = async (event) => {
     if (!isValidEmail(email)) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Invalid email format'
@@ -132,10 +110,6 @@ export const handler = async (event) => {
     if (!isValidPassword(password)) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Password must be at least 4 characters long'
@@ -143,7 +117,6 @@ export const handler = async (event) => {
       };
     }
 
-    console.log('Creating new user account for:', email);
 
     // Connect to database
     const client = await Promise.race([
@@ -153,35 +126,25 @@ export const handler = async (event) => {
       )
     ]);
     
-    console.log('Database connection established');
     
     // Access users collection
     const db = client.db(DB_NAME);
     const usersCollection = db.collection('users');
     
     // Check if user already exists (case insensitive email check)
-    console.log('Checking if user already exists...');
     const existingUser = await usersCollection.findOne({
       email: email.toLowerCase()
     });
     
     if (existingUser) {
-      console.log('User already exists');
       return {
         statusCode: 409,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'User with this email already exists'
         })
       };
     }
-    
-    console.log('User does not exist, creating new account...');
-    
     // Create new user document matching the exact schema
     const newUser = {
       firstName: firstName.trim(),
@@ -197,15 +160,9 @@ export const handler = async (event) => {
     const result = await usersCollection.insertOne(newUser);
     
     if (result.insertedId) {
-      console.log('User created successfully with ID:', result.insertedId);
-      
       // Return success response (no sensitive data)
       return {
         statusCode: 201,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: true,
           message: `Welcome ${firstName}! Your account has been created successfully`,
@@ -227,13 +184,8 @@ export const handler = async (event) => {
     }
 
   } catch (error) {
-    console.error('Error in registration handler:', error);
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
       body: JSON.stringify({
         success: false,
         message: 'Internal server error',

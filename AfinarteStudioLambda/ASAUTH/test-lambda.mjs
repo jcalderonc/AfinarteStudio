@@ -14,7 +14,7 @@ const testEvent = {
   },
   body: JSON.stringify({
     email: "juan.prueba@afinartestudio.com",
-    password: "test"
+    password: "testing1"
   })
 };
 

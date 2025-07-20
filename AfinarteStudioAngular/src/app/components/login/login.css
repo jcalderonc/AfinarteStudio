@@ -1,0 +1,37 @@
+/* Estilos específicos del componente login */
+
+/* Contenedor principal centrado */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Card del login */
+.login-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Form fields ocupan todo el ancho disponible */
+.full-width {
+  width: 100%;
+}
+
+/* Espaciado entre form fields */
+mat-form-field {
+  margin-bottom: 16px;
+}
+
+/* Botón de submit ocupa todo el ancho */
+.submit-button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Espaciado para mensajes de error generales */
+.general-error {
+  margin-bottom: 16px;
+}

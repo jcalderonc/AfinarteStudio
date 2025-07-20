@@ -33,6 +33,44 @@ else
     echo -e "${GREEN}   ✅ No old deployment packages to remove${NC}"
 fi
 
+# Function to install dependencies for a Lambda function
+install_dependencies() {
+    local FUNCTION_NAME=$1
+    local FUNCTION_DIR=$2
+    
+    echo -e "${YELLOW}📦 Installing dependencies for ${FUNCTION_NAME}...${NC}"
+    
+    # Check if function directory exists
+    if [ ! -d "$FUNCTION_DIR" ]; then
+        echo -e "${RED}   ❌ Error: Function directory $FUNCTION_DIR not found${NC}"
+        return 1
+    fi
+    
+    # Check if package.json exists
+    if [ ! -f "$FUNCTION_DIR/package.json" ]; then
+        echo -e "${RED}   ❌ Error: package.json not found in $FUNCTION_DIR${NC}"
+        return 1
+    fi
+    
+    # Install dependencies
+    echo "   🔧 Running npm install..."
+    (cd "$FUNCTION_DIR" && npm install > /dev/null 2>&1)
+    
+    if [ $? -eq 0 ]; then
+        # Verify node_modules was created
+        if [ -d "$FUNCTION_DIR/node_modules" ]; then
+            echo -e "${GREEN}   ✅ Dependencies installed successfully${NC}"
+            return 0
+        else
+            echo -e "${RED}   ❌ node_modules directory not created${NC}"
+            return 1
+        fi
+    else
+        echo -e "${RED}   ❌ npm install failed${NC}"
+        return 1
+    fi
+}
+
 # Function to run tests for a Lambda function
 run_function_tests() {
     local FUNCTION_NAME=$1
@@ -105,6 +143,26 @@ create_deployment_package() {
         return 1
     fi
 }
+
+# Install dependencies before running tests
+echo -e "${BLUE}📦 Installing dependencies...${NC}"
+
+if install_dependencies "ASAUTH" "ASAUTH"; then
+    echo -e "${GREEN}   ✅ ASAUTH dependencies installed${NC}"
+else
+    echo -e "${RED}   ❌ ASAUTH dependency installation failed - aborting deployment${NC}"
+    exit 1
+fi
+
+if install_dependencies "ASSIGNUP" "ASSIGNUP"; then
+    echo -e "${GREEN}   ✅ ASSIGNUP dependencies installed${NC}"
+else
+    echo -e "${RED}   ❌ ASSIGNUP dependency installation failed - aborting deployment${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}🎉 All dependencies installed! Proceeding with tests...${NC}"
+echo ""
 
 # Run tests before creating deployment packages
 echo -e "${BLUE}🧪 Running tests before deployment...${NC}"

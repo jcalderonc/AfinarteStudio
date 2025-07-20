@@ -5,55 +5,35 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Environment variables
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://lambda:test@afinartestudio.czf6kai.mongodb.net/?retryWrites=true&w=majority&appName=AfinarteStudio';
-const DB_NAME = process.env.DB_NAME || 'afinarteStudio';
-const JWT_SECRET = process.env.JWT_SECRET || 'default-secret-key-change-in-production';
+const MONGODB_URI = process.env.MONGODB_URI;
+const DB_NAME = process.env.DB_NAME;
+const JWT_SECRET = process.env.JWT_SECRET;
+
 // Database connection instance
-let dbClient = null;
-let database = null;
+let cache = null;
 
-let cachedClient = null;
-
-const connectToDatabase = async () => {
-  if (cachedClient && cachedClient.topology && cachedClient.topology.isConnected()) {
-    console.log('Using cached MongoDB connection');
-    return cachedClient;
-  }
-
-  try {
-    console.log('Creating new MongoDB connection...');
-    console.log('Connection URI (without password):', MONGODB_URI.replace(/\/\/.*:.*@/, '//***:***@'));
-    
-    // Create a MongoClient with ServerApi version (official Atlas pattern)
-    const client = new MongoClient(MONGODB_URI, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      }
-    });
-    
-    console.log('Calling client.connect()...');
-    await client.connect();
-    console.log('Client.connect() completed');
-    
-    cachedClient = client;
-    console.log('Connected to MongoDB successfully');
-    return client;
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    console.error('Error name:', error.name);
-    console.error('Error code:', error.code);
-    console.error('Error cause:', error.cause);
-    cachedClient = null; // Reset cache on error
-    throw new Error(`Database connection failed: ${error.message}`);
-  }
-};
 
 export const handler = async (event) => {
   try {
-    console.log('ASAUTH Lambda - User Authentication');
-    console.log('Lambda timeout should be at least 30 seconds');
+
+    // CORS validation
+    const corsHeaders = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+    };
+
+    const httpMethod = event.httpMethod || event.requestContext?.http?.method;
+  
+    if (httpMethod === 'OPTIONS') {
+      return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'CORS preflight successful' })
+      };
+    }
+
 
     // Parse request body
     let requestBody;
@@ -61,10 +41,6 @@ export const handler = async (event) => {
       if (!event.body) {
         return {
           statusCode: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          },
           body: JSON.stringify({
             success: false,
             message: 'Request body is required'
@@ -76,10 +52,6 @@ export const handler = async (event) => {
     } catch (error) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Invalid JSON in request body'
@@ -93,18 +65,12 @@ export const handler = async (event) => {
     if (!email || !password) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Email and password are required'
         })
       };
     }
-
-    console.log('Attempting to authenticate user:', email);
 
     // Connect to database
     const client = await Promise.race([
@@ -114,52 +80,35 @@ export const handler = async (event) => {
       )
     ]);
     
-    console.log('Database connection established');
-    
     // Access users collection
     const db = client.db(DB_NAME);
     const usersCollection = db.collection('users');
     
     // Find user by email (case insensitive)
-    console.log('Searching for user in database...');
     const user = await usersCollection.findOne({
       email: email.toLowerCase()
     });
     
     if (!user) {
-      console.log('User not found');
       return {
         statusCode: 401,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Invalid credentials'
         })
       };
     }
-    
-    console.log('User found, verifying password...');
     
     // Verify password (plain text comparison for now)
     if (password !== user.password) {
-      console.log('Password verification failed');
       return {
         statusCode: 401,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
         body: JSON.stringify({
           success: false,
           message: 'Invalid credentials'
         })
       };
     }
-    
-    console.log('Password verified successfully');
     
     // Generate secure token using JWT_SECRET
     const tokenData = {
@@ -172,16 +121,11 @@ export const handler = async (event) => {
     const tokenString = JSON.stringify(tokenData);
     const signature = Buffer.from(JWT_SECRET + tokenString).toString('base64');
     const token = Buffer.from(tokenString).toString('base64') + '.' + signature;
-    
-    console.log('Authentication successful, returning user data');
+  
     
     // Return success response with user data and token
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
       body: JSON.stringify({
         success: true,
         message: `Welcome ${user.firstName || user.name || 'User'}! Authentication successful`,
@@ -197,19 +141,14 @@ export const handler = async (event) => {
           },
           token: token,
           loginTime: new Date().toISOString(),
-          expiresIn: '24h' // Token validity period
+          expiresIn: '24h'
         }
       })
     };
 
   } catch (error) {
-    console.error('Error in authentication handler:', error);
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      },
       body: JSON.stringify({
         success: false,
         message: 'Internal server error',
@@ -217,5 +156,32 @@ export const handler = async (event) => {
         timestamp: new Date().toISOString()
       })
     };
+  }
+};
+
+
+
+const connectToDatabase = async () => {
+  if (cache?.topology?.isConnected()) {
+    return cache;
+  }
+
+  try {
+    // Create a MongoClient with ServerApi version (official Atlas pattern)
+    const client = new MongoClient(MONGODB_URI, {
+      serverApi: {  
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      }
+    });
+
+    await client.connect();
+    cache = client;
+
+    return client;
+  } catch (error) {
+    cache = null; // Reset cache on error
+    throw new Error(`Database connection failed: ${error.message}`);
   }
 };

@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'calendar.css';
+
+html, body { 
+    height: 100%;
+    font-family: 'Roboto', Arial, sans-serif;
+ }
+body { margin: 0; }

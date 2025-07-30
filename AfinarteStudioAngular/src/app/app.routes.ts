@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login';
+import { UserComponent } from './components/user/user';
 import { SchedulerComponent } from './components/scheduler/scheduler';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
+    { path: 'login', component: UserComponent },
     { path: 'scheduler', component: SchedulerComponent },
 
 ];

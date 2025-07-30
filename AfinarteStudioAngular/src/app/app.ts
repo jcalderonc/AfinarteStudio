@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgIf, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -18,7 +18,6 @@ import { LoginService } from './services/login';
   standalone: true,
   imports: [
     CommonModule,
-    NgIf,
     RouterOutlet,
     MatToolbarModule,
     MatSidenavModule,

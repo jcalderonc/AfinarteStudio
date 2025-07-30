@@ -1,0 +1,41 @@
+<div class="appointment-dialog">
+  <h2 mat-dialog-title>Nueva Cita</h2>
+  <div mat-dialog-content>
+    <form [formGroup]="appointmentForm" class="appointment-form">
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Fecha</mat-label>
+        <input matInput [value]="(data.selectedDate || null) | mexicoDate" readonly>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo de servicio</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of appointmentTypes" [value]="type">
+            {{ type }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="isFieldInvalid('type')">
+          {{ getFieldError('type') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Comentarios</mat-label>
+        <textarea matInput formControlName="comments" rows="3" placeholder="Ej: Piano vertical Kawai"></textarea>
+      </mat-form-field>
+
+    </form>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="appointmentForm.invalid">
+      Guardar
+    </button>
+  </div>
+</div>

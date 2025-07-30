@@ -1,0 +1,40 @@
+<div class="user-root">
+  
+  <!-- Botón para alternar vista -->
+  <div class="view-toggle">
+    <button mat-button 
+            
+            (click)="switchToLogin()">
+      Iniciar Sesión
+    </button>
+    <button mat-button 
+           
+            (click)="switchToRegister()">
+      Registrarse
+    </button>
+  </div>
+
+  <!-- Contenedor animado -->
+  <mat-card class="user-card-mat">
+    <mat-card-header>
+      <mat-card-title class="user-title">
+        {{ currentView() === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta' }}
+      </mat-card-title>
+      <mat-card-subtitle class="user-subtitle">
+        {{ currentView() === 'login' ? 'Ingresa tus credenciales para acceder' : 'Completa tus datos para registrarte' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+
+      <div class="content-container login-content" *ngIf="currentView() === 'login'">
+        <app-login></app-login>
+      </div>
+      <div class="content-container register-content" *ngIf="currentView() === 'register'">
+        <app-register></app-register>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>

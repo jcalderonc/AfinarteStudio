@@ -1,35 +1,58 @@
 
-<mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span style="margin-left: 8px;">Afinarte Studio</span>
-      <span class="spacer"></span>
-      <button mat-icon-button>
-        <mat-icon>notifications</mat-icon>
-      </button>
-      <button mat-icon-button>
-        <mat-icon>account_circle</mat-icon>
-      </button>
-    </mat-toolbar>
-<mat-sidenav-container style="height: 100vh;">
-  <mat-sidenav #sidenav mode="side" opened>
+<ng-container *ngIf="loginService.isAuthenticated(); else loginTemplate">
+ <mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span style="margin-left: 8px;">Afinarte Studio</span>
+  <span class="spacer"></span>
+  <button mat-icon-button>
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="accountMenu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #accountMenu="matMenu">
+    <button mat-menu-item (click)="loginService.logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav
+    mode="side"
+    opened
+    [class.sidenav-rail]="!isSidenavExpanded"
+    [class.sidenav-expanded]="isSidenavExpanded"
+    (mouseleave)="collapseSidenav()">
     <mat-nav-list>
       <a mat-list-item routerLink="/">
         <mat-icon>home</mat-icon>
-        Inicio
+        <span class="sidenav-label" *ngIf="isSidenavExpanded">Inicio</span>
       </a>
       <a mat-list-item routerLink="/login">
         <mat-icon>login</mat-icon>
-        Login
+        <span class="sidenav-label" *ngIf="isSidenavExpanded">Login</span>
       </a>
       <a mat-list-item routerLink="/scheduler">
         <mat-icon>event</mat-icon>
-        Scheduler
+        <span class="sidenav-label" *ngIf="isSidenavExpanded">Scheduler</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-  <router-outlet></router-outlet> 
+    <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
+</ng-container>
+
+
+
+
+
+
+<!-- Esto siempre se muestra, autenticado o no -->
+<ng-template #loginTemplate>
+  <router-outlet></router-outlet>
+</ng-template>

@@ -1,3 +1,87 @@
+
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--mat-sys-surface) inset;
+    -webkit-text-fill-color: var(--mat-sys-primary) !important;
+}
+
+/* Login page modern styles using Angular Material theme variables */
+.login-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mat-sys-background);
+}
+
+.login-card-mat {
+  min-width: 340px;
+  max-width: 400px;
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 var(--mat-sys-surface);
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  padding: 24px 18px 18px 18px;
+}
+
+.login-title {
+  color: var(--mat-sys-primary);
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.login-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-field {
+  width: 100%;
+  background: transparent !important;
+  border-radius: 8px;
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.login-submit-btn {
+  font-weight: 500;
+  border-radius: 8px;
+  background: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+  box-shadow: 0 4px 24px 0 var(--mat-sys-background);
+  transition: background 0.2s;
+  border: none;
+}
+.login-submit-btn:hover,
+.login-submit-btn:focus,
+.login-submit-btn:active {
+  background: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary);
+  filter: brightness(1.08);
+}
+.login-submit-btn[disabled] {
+  opacity: 0.7;
+}
+
+.login-forgot-btn {
+  align-self: flex-end;
+  color: var(--mat-sys-secondary);
+  font-size: 0.95rem;
+  text-transform: none;
+}
 /* Estilos específicos del componente login */
 
 /* Contenedor principal centrado */
@@ -18,11 +102,24 @@
 /* Form fields ocupan todo el ancho disponible */
 .full-width {
   width: 100%;
+  background: transparent !important;
+  color: var(--mat-sys-on-surface) !important;
 }
 
 /* Espaciado entre form fields */
 mat-form-field {
   margin-bottom: 16px;
+  background: transparent !important;
+}
+/* Forzar los input y textarea nativos a fondo transparente y texto del theme */
+input.mat-input-element, textarea.mat-input-element {
+  background: transparent !important;
+  color: var(--mat-sys-on-surface) !important;
+  caret-color: var(--mat-sys-primary);
+}
+input.mat-input-element::placeholder, textarea.mat-input-element::placeholder {
+  color: var(--mat-sys-on-surface-variant) !important;
+  opacity: 1;
 }
 
 /* Botón de submit ocupa todo el ancho */

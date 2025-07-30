@@ -1,3 +1,55 @@
+/* Separación entre toolbar y sidenav-container */
+mat-toolbar {
+  margin-bottom: 10px;
+  background: var(--mat-sys-surface-variant);
+}
+mat-sidenav-container {
+  background: var(--mat-sys-background) !important;
+}
+mat-sidenav-content {
+  padding-left: 10px;
+}
+/* Sidenav rail styles */
+.sidenav-rail {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+  overflow-x: hidden;
+  transition: width 0.2s cubic-bezier(.4,0,.2,1);
+}
+.sidenav-expanded {
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  transition: width 0.2s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 4px 24px 0 var(--mat-sys-background);
+}
+.mat-nav-list {
+  padding: 0;
+}
+.mat-list-item {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 8px;
+  margin: 4px 4px;
+  transition: background 0.2s;
+}
+.mat-list-item:hover {
+  background: var(--mat-sys-background)
+}
+.mat-list-item .mat-icon {
+  margin-right: 0;
+  text-align: center;
+}
+.sidenav-label {
+  margin-left: 15px;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-weight: 400;
+  transition: opacity 0.2s;
+}
 .main-layout {
   display: flex;
   height: 100vh;

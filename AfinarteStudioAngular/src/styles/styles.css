@@ -4,5 +4,6 @@
 html, body { 
     height: 100%;
     font-family: 'Roboto', Arial, sans-serif;
+    background: var(--mat-sys-background) !important;
  }
 body { margin: 0; }

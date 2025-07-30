@@ -1,46 +1,29 @@
-
-
-<div class="container">
-  <mat-card>
-    <mat-card-title>Genera una cita</mat-card-title>
-    <mat-card-subtitle>Haz clic sobre la fecha para crear tu cita</mat-card-subtitle>
+<div class="scheduler-root">
+  <mat-card class="scheduler-card">
+    <mat-card-header>
+      <mat-card-title class="scheduler-title">Genera una cita</mat-card-title>
+      <mat-card-subtitle class="scheduler-subtitle">Haz clic sobre la fecha para crear tu cita</mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
       <div class="scheduler-controls">
-    <button mat-raised-button color="primary"
-      mwlCalendarPreviousView
-      [view]="view"
-      [(viewDate)]="viewDate"
-      (viewDateChange)="onViewDateChange()">
-      <mat-icon>chevron_left</mat-icon>
-      Anterior
-    </button>
-    <button mat-stroked-button color="accent"
-      mwlCalendarToday
-      [(viewDate)]="viewDate">
-      <mat-icon>today</mat-icon>
-      Hoy
-    </button>
-    <button mat-raised-button color="primary"
-      mwlCalendarNextView
-      [view]="view"
-      [(viewDate)]="viewDate"
-      (viewDateChange)="onViewDateChange()">
-      Siguiente
-      <mat-icon>chevron_right</mat-icon>
-    </button>
-  </div>
-  </mat-card-content>
-</mat-card>
-
-
-
-  
-
-<mwl-calendar-week-view
-  [viewDate]="viewDate"
-  [events]="events"
-  (hourSegmentClicked)="handleHourClick($event)">
-</mwl-calendar-week-view>
-
-
+        <button mat-icon-button class="scheduler-nav-btn" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="onViewDateChange()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-stroked-button class="scheduler-today-btn" color="accent" mwlCalendarToday [(viewDate)]="viewDate">
+          <mat-icon>today</mat-icon>
+          Hoy
+        </button>
+        <button mat-icon-button class="scheduler-nav-btn" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="onViewDateChange()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+      <div class="scheduler-calendar-wrapper">
+        <mwl-calendar-week-view
+          [viewDate]="viewDate"
+          [events]="events"
+          (hourSegmentClicked)="handleHourClick($event)">
+        </mwl-calendar-week-view>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

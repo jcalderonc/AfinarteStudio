@@ -9,6 +9,8 @@ import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { AppointmentComponent } from '../appointment/appointment';
 
 @Component({
   selector: 'app-scheduler',
@@ -29,7 +31,8 @@ export class SchedulerComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private snackbar: Snackbar
+    private snackbar: Snackbar,
+    private dialog: MatDialog
   ) {}
 
   viewDate: Date = new Date();
@@ -41,14 +44,36 @@ export class SchedulerComponent implements OnInit {
       start: addHours(startOfWeek(new Date()), 10),
       end: addHours(startOfWeek(new Date()), 11),
       title: 'Cita ocupada',
-      color: { primary: '#ad2121', secondary: '#FAE3E3' }
+      color: { primary: '#a0c182ff', secondary: '#739d00ff' }
     }
     // ...más eventos
   ];
 
   handleHourClick(event: any) {
-    this.snackbar.showInfo(`Hora seleccionada: ${event.date}`, 'Cerrar');
-    // Aquí puedes abrir un modal para agendar una cita
+    this.openAppointmentDialog(event.date);
+  }
+
+  openAppointmentDialog(selectedDate?: Date) {
+    const userEmail = this.loginService.userSignedIn()?.email || '';
+    
+    const dialogRef = this.dialog.open(AppointmentComponent, {
+      width: '500px',
+      maxWidth: '90vw',
+      disableClose: false,
+      hasBackdrop: true,
+      backdropClass: 'custom-backdrop',
+      data: { 
+        selectedDate: selectedDate,
+        userEmail: userEmail
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Cita creada:', result);
+        // Aquí puedes agregar la lógica para guardar la cita
+      }
+    });
   }
 
   ngOnInit(): void {

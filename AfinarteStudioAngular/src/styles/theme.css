@@ -56,10 +56,10 @@ html {
   --mat-sys-neutral10: #1a1c1c; /* Variable used for the form field native select option text color */
 
   /* Error palette variables */
-  --mat-sys-error: #ffb3af;
-  --mat-sys-on-error: #68000f;
-  --mat-sys-error-container: #930019;
-  --mat-sys-on-error-container: #ffdad8;
+  --mat-sys-error: #2979ff;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-error-container: #0039cb;
+  --mat-sys-on-error-container: #ffffff;
 
   /* Neutral variant palette variables */
   --mat-sys-surface-variant: #454747;

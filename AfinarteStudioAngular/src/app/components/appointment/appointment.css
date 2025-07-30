@@ -1,0 +1,18 @@
+.appointment-dialog {
+  min-width: 400px;
+}
+
+.appointment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  gap: 8px;
+}

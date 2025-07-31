@@ -15,29 +15,27 @@
   <mat-menu #accountMenu="matMenu">
     <button mat-menu-item (click)="loginService.logout()">
       <mat-icon>logout</mat-icon>
-      <span>Logout</span>
+      <mat-label>Logout</mat-label>
     </button>
   </mat-menu>
 </mat-toolbar>
 <mat-sidenav-container>
   <mat-sidenav #sidenav
     mode="side"
-    opened
-    [class.sidenav-rail]="!isSidenavExpanded"
-    [class.sidenav-expanded]="isSidenavExpanded"
+    [opened]="isSidenavExpanded()"
     (mouseleave)="collapseSidenav()">
     <mat-nav-list>
       <a mat-list-item routerLink="/">
         <mat-icon>home</mat-icon>
-        <span class="sidenav-label" *ngIf="isSidenavExpanded">Inicio</span>
+        <mat-label>Inicio</mat-label>
       </a>
       <a mat-list-item routerLink="/login">
         <mat-icon>login</mat-icon>
-        <span class="sidenav-label" *ngIf="isSidenavExpanded">Login</span>
+        <mat-label>Login</mat-label>
       </a>
       <a mat-list-item routerLink="/scheduler">
         <mat-icon>event</mat-icon>
-        <span class="sidenav-label" *ngIf="isSidenavExpanded">Scheduler</span>
+        <mat-label>Scheduler</mat-label>
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -46,10 +44,6 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 </ng-container>
-
-
-
-
 
 
 <!-- Esto siempre se muestra, autenticado o no -->

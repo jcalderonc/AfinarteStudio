@@ -1,7 +1,7 @@
 <div class="user-root">
   
   <!-- Botón para alternar vista -->
-  <div class="view-toggle">
+  <div>
     <button mat-button 
             
             (click)="switchToLogin()">
@@ -14,8 +14,8 @@
     </button>
   </div>
 
-  <!-- Contenedor animado -->
-  <mat-card class="user-card-mat">
+
+  <mat-card class="user-card-mat" [@heightAnimation]="currentView()">
     <mat-card-header>
       <mat-card-title class="user-title">
         {{ currentView() === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta' }}
@@ -27,12 +27,11 @@
     
     <mat-card-content>
 
-      <div class="content-container login-content" *ngIf="currentView() === 'login'">
-        <app-login></app-login>
-      </div>
-      <div class="content-container register-content" *ngIf="currentView() === 'register'">
-        <app-register></app-register>
-      </div>
+        @if (currentView() === 'login') {
+          <app-login></app-login>
+        } @else {
+          <app-register></app-register>
+        }
 
     </mat-card-content>
   </mat-card>

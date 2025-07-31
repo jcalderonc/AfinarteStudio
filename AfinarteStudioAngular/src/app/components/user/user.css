@@ -16,7 +16,6 @@
   background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   padding: 24px 18px 18px 18px;
-  /* La animación de tamaño se maneja en el trigger containerSize */
 }
 
 .user-title {

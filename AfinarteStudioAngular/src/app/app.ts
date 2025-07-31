@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -7,8 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatLabel } from '@angular/material/form-field';
 import { LoginService } from './services/login';
-
 
 
 @Component({
@@ -24,22 +24,20 @@ import { LoginService } from './services/login';
     MatIconModule,
     MatListModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    MatLabel
   ]
 })
 export class AppComponent {
-  isSidenavExpanded = false;
+  isSidenavExpanded = signal(false);
 
-  /**
-   *
-   */
   constructor(public loginService: LoginService) {}
 
   toggleSidenav() {
-    this.isSidenavExpanded = !this.isSidenavExpanded;
+    this.isSidenavExpanded.set(!this.isSidenavExpanded());
   }
 
   collapseSidenav() {
-    this.isSidenavExpanded = false;
+    this.isSidenavExpanded.set(false);
   }
 }

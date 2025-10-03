@@ -12,10 +12,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Database connection instance
 let cache = null;
 
-
 export const handler = async (event) => {
   try {
-
     // CORS validation
     const corsHeaders = {
       'Content-Type': 'application/json',
@@ -33,7 +31,6 @@ export const handler = async (event) => {
         body: JSON.stringify({ message: 'CORS preflight successful' })
       };
     }
-
 
     // Parse request body
     let requestBody;
@@ -121,8 +118,7 @@ export const handler = async (event) => {
     const tokenString = JSON.stringify(tokenData);
     const signature = Buffer.from(JWT_SECRET + tokenString).toString('base64');
     const token = Buffer.from(tokenString).toString('base64') + '.' + signature;
-  
-    
+
     // Return success response with user data and token
     return {
       statusCode: 200,
@@ -159,8 +155,6 @@ export const handler = async (event) => {
   }
 };
 
-
-
 const connectToDatabase = async () => {
   if (cache?.topology?.isConnected()) {
     return cache;
@@ -169,7 +163,7 @@ const connectToDatabase = async () => {
   try {
     // Create a MongoClient with ServerApi version (official Atlas pattern)
     const client = new MongoClient(MONGODB_URI, {
-      serverApi: {  
+      serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,

@@ -8,39 +8,8 @@ dotenv.config();
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.DB_NAME;
 
-let cachedClient = null;
-
-const connectToDatabase = async () => {
-  if (cachedClient && cachedClient.topology && cachedClient.topology.isConnected()) {
-
-    return cachedClient;
-  }
-
-  try {
-   
-    
-    // Create a MongoClient with ServerApi version (official Atlas pattern)
-    const client = new MongoClient(MONGODB_URI, {
-      serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-      }
-    });
-    
-    
-    await client.connect();
-    
-    
-    cachedClient = client;
-    
-    return client;
-  } catch (error) {
-    
-    cachedClient = null; // Reset cache on error
-    throw new Error(`Database connection failed: ${error.message}`);
-  }
-};
+// Database connection instance
+let cache = null;
 
 // Email validation function
 const isValidEmail = (email) => {
@@ -56,7 +25,7 @@ const isValidPassword = (password) => {
 
 export const handler = async (event) => {
   try {
-    // CORS validation - Same as ASAUTH
+    // CORS validation
     const corsHeaders = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
@@ -139,16 +108,9 @@ export const handler = async (event) => {
       };
     }
 
-
     // Connect to database
-    const client = await Promise.race([
-      connectToDatabase(),
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Connection timeout after 10 seconds')), 10000)
-      )
-    ]);
-    
-    
+    const client = await connectToDatabase();
+
     // Access users collection
     const db = client.db(DB_NAME);
     const usersCollection = db.collection('users');
@@ -218,5 +180,31 @@ export const handler = async (event) => {
         timestamp: new Date().toISOString()
       })
     };
+  }
+};
+
+// Database connection function - Same as ASAUTH
+const connectToDatabase = async () => {
+  if (cache?.topology?.isConnected()) {
+    return cache;
+  }
+
+  try {
+    // Create a MongoClient with ServerApi version (official Atlas pattern)
+    const client = new MongoClient(MONGODB_URI, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      }
+    });
+
+    await client.connect();
+    cache = client;
+
+    return client;
+  } catch (error) {
+    cache = null; // Reset cache on error
+    throw new Error(`Database connection failed: ${error.message}`);
   }
 };

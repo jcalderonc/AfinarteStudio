@@ -161,6 +161,13 @@ else
     exit 1
 fi
 
+if install_dependencies "ASAPPOINTMENT" "ASAPPOINTMENT"; then
+    echo -e "${GREEN}   ✅ ASAPPOINTMENT dependencies installed${NC}"
+else
+    echo -e "${RED}   ❌ ASAPPOINTMENT dependency installation failed - aborting deployment${NC}"
+    exit 1
+fi
+
 echo -e "${GREEN}🎉 All dependencies installed! Proceeding with tests...${NC}"
 echo ""
 
@@ -181,6 +188,13 @@ else
     exit 1
 fi
 
+if run_function_tests "ASAPPOINTMENT" "ASAPPOINTMENT"; then
+    echo -e "${GREEN}   ✅ ASAPPOINTMENT tests completed${NC}"
+else
+    echo -e "${RED}   ❌ ASAPPOINTMENT tests failed - aborting deployment${NC}"
+    exit 1
+fi
+
 echo -e "${GREEN}🎉 All tests passed! Proceeding with deployment...${NC}"
 echo ""
 
@@ -198,6 +212,13 @@ if create_deployment_package "ASSIGNUP" "ASSIGNUP"; then
     echo -e "${GREEN}   ✅ ASSIGNUP package created successfully${NC}"
 else
     echo -e "${RED}   ❌ Failed to create ASSIGNUP package${NC}"
+    exit 1
+fi
+
+if create_deployment_package "ASAPPOINTMENT" "ASAPPOINTMENT"; then
+    echo -e "${GREEN}   ✅ ASAPPOINTMENT package created successfully${NC}"
+else
+    echo -e "${RED}   ❌ Failed to create ASAPPOINTMENT package${NC}"
     exit 1
 fi
 

@@ -56,6 +56,23 @@ const isValidPassword = (password) => {
 
 export const handler = async (event) => {
   try {
+    // CORS validation - Same as ASAUTH
+    const corsHeaders = {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+    };
+
+    const httpMethod = event.httpMethod || event.requestContext?.http?.method;
+  
+    if (httpMethod === 'OPTIONS') {
+      return {
+        statusCode: 200,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'CORS preflight successful' })
+      };
+    }
 
     // Parse request body
     let requestBody;
@@ -63,6 +80,7 @@ export const handler = async (event) => {
       if (!event.body) {
         return {
           statusCode: 400,
+          headers: corsHeaders,
           body: JSON.stringify({
             success: false,
             message: 'Request body is required'
@@ -74,6 +92,7 @@ export const handler = async (event) => {
     } catch (error) {
       return {
         statusCode: 400,
+        headers: corsHeaders,
         body: JSON.stringify({
           success: false,
           message: 'Invalid JSON in request body'
@@ -88,6 +107,7 @@ export const handler = async (event) => {
     if (!firstName || !lastName || !email || !phone || !password || acceptTerms !== true) {
       return {
         statusCode: 400,
+        headers: corsHeaders,
         body: JSON.stringify({
           success: false,
           message: 'All fields are required: firstName, lastName, email, phone, password, acceptTerms (must be true)'
@@ -99,6 +119,7 @@ export const handler = async (event) => {
     if (!isValidEmail(email)) {
       return {
         statusCode: 400,
+        headers: corsHeaders,
         body: JSON.stringify({
           success: false,
           message: 'Invalid email format'
@@ -110,6 +131,7 @@ export const handler = async (event) => {
     if (!isValidPassword(password)) {
       return {
         statusCode: 400,
+        headers: corsHeaders,
         body: JSON.stringify({
           success: false,
           message: 'Password must be at least 4 characters long'
@@ -139,6 +161,7 @@ export const handler = async (event) => {
     if (existingUser) {
       return {
         statusCode: 409,
+        headers: corsHeaders,
         body: JSON.stringify({
           success: false,
           message: 'User with this email already exists'
@@ -163,6 +186,7 @@ export const handler = async (event) => {
       // Return success response (no sensitive data)
       return {
         statusCode: 201,
+        headers: corsHeaders,
         body: JSON.stringify({
           success: true,
           message: `Welcome ${firstName}! Your account has been created successfully`,
@@ -186,6 +210,7 @@ export const handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
+      headers: corsHeaders,
       body: JSON.stringify({
         success: false,
         message: 'Internal server error',

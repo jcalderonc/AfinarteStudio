@@ -7,18 +7,20 @@ dotenv.config();
 // Environment variables
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.DB_NAME;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Database connection instance
 let cache = null;
 
 export const handler = async (event) => {
   try {
-    // CORS validation
+    // CORS validation - Same as ASAUTH and ASSIGNUP
     const corsHeaders = {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Max-Age': '86400'
     };
 
     const httpMethod = event.httpMethod || event.requestContext?.http?.method;
@@ -28,6 +30,23 @@ export const handler = async (event) => {
         statusCode: 200,
         headers: corsHeaders,
         body: JSON.stringify({ message: 'CORS preflight successful' })
+      };
+    }
+
+    // Validate authentication token for all methods except OPTIONS
+    const authHeader = event.headers?.Authorization || event.headers?.authorization;
+    const token = authHeader?.replace('Bearer ', '') || authHeader;
+    
+    const tokenValidation = validateToken(token);
+    if (!tokenValidation.valid) {
+      return {
+        statusCode: 401,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          success: false,
+          message: 'Authentication required',
+          error: tokenValidation.error
+        })
       };
     }
 
@@ -58,7 +77,8 @@ export const handler = async (event) => {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Max-Age': '86400'
       },
       body: JSON.stringify({
         success: false,
@@ -474,6 +494,42 @@ const deleteAppointment = async (event, corsHeaders) => {
         error: error.message
       })
     };
+  }
+};
+
+// Token validation function - Same as ASAUTH
+const validateToken = (token) => {
+  try {
+    if (!token) {
+      return { valid: false, error: 'No token provided' };
+    }
+
+    // Split token into payload and signature
+    const [payload, signature] = token.split('.');
+    if (!payload || !signature) {
+      return { valid: false, error: 'Invalid token format' };
+    }
+
+    // Decode payload
+    const tokenData = JSON.parse(Buffer.from(payload, 'base64').toString());
+    
+    // Verify signature
+    const expectedSignature = Buffer.from(JWT_SECRET + JSON.stringify(tokenData)).toString('base64');
+    if (signature !== expectedSignature) {
+      return { valid: false, error: 'Invalid token signature' };
+    }
+
+    // Check if token is expired (24 hours)
+    const tokenAge = Date.now() - tokenData.timestamp;
+    const maxAge = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    
+    if (tokenAge > maxAge) {
+      return { valid: false, error: 'Token expired' };
+    }
+
+    return { valid: true, userData: tokenData };
+  } catch (error) {
+    return { valid: false, error: 'Token validation failed' };
   }
 };
 

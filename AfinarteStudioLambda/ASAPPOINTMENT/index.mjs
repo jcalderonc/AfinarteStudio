@@ -12,6 +12,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Database connection instance
 let cache = null;
 
+// Valid appointment statuses
+const APPOINTMENT_STATUSES = ['Tentativo', 'Confirmado', 'Completado'];
+const DEFAULT_STATUS = 'Tentativo';
+
 export const handler = async (event) => {
   try {
     // CORS validation - Same as ASAUTH and ASSIGNUP
@@ -100,7 +104,7 @@ const getAppointments = async (event, corsHeaders) => {
     
     // Get query parameters for filtering
     const queryParams = event.queryStringParameters || {};
-    const { email, type, dateFrom, dateTo } = queryParams;
+    const { email, type, status, dateFrom, dateTo } = queryParams;
     
     // Build query filter
     let filter = {};
@@ -109,6 +113,9 @@ const getAppointments = async (event, corsHeaders) => {
     }
     if (type) {
       filter.type = type;
+    }
+    if (status && APPOINTMENT_STATUSES.includes(status)) {
+      filter.status = status;
     }
     if (dateFrom || dateTo) {
       filter.date = {};
@@ -135,8 +142,11 @@ const getAppointments = async (event, corsHeaders) => {
             email: appointment.email,
             date: appointment.date,
             type: appointment.type,
+            status: appointment.status ?? DEFAULT_STATUS,
             comments: appointment.comments,
             location: appointment.location,
+            totalAmount: appointment.totalAmount ?? 0,
+            balanceDue: appointment.balanceDue ?? 0,
             createdAt: appointment.createdAt
           })),
           count: appointments.length,
@@ -188,7 +198,7 @@ const createAppointment = async (event, corsHeaders) => {
     }
 
     // Extract required fields
-    const { email, date, type, comments, location } = requestBody;
+    const { email, date, type, status, comments, location, totalAmount, balanceDue } = requestBody;
     
     // Validate required fields
     if (!email || !date || !type) {
@@ -228,6 +238,29 @@ const createAppointment = async (event, corsHeaders) => {
       };
     }
 
+    // Parse and validate currency fields (optional; default 0)
+    const parsedTotalAmount = parseCurrency(totalAmount, 'totalAmount');
+    if (parsedTotalAmount.error) {
+      return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ success: false, message: parsedTotalAmount.error }) };
+    }
+    const parsedBalanceDue = parseCurrency(balanceDue, 'balanceDue');
+    if (parsedBalanceDue.error) {
+      return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ success: false, message: parsedBalanceDue.error }) };
+    }
+
+    // Validate status (optional; default Tentativo)
+    const appointmentStatus = status ? status.trim() : DEFAULT_STATUS;
+    if (!APPOINTMENT_STATUSES.includes(appointmentStatus)) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          success: false,
+          message: `Invalid status. Allowed: ${APPOINTMENT_STATUSES.join(', ')}`
+        })
+      };
+    }
+
     // Connect to database
     const client = await connectToDatabase();
     const db = client.db(DB_NAME);
@@ -238,8 +271,11 @@ const createAppointment = async (event, corsHeaders) => {
       email: email.toLowerCase().trim(),
       date: appointmentDate,
       type: type.trim(),
+      status: appointmentStatus,
       comments: comments ? comments.trim() : '',
       location: location ? location.trim() : '',
+      totalAmount: parsedTotalAmount.value,
+      balanceDue: parsedBalanceDue.value,
       createdAt: new Date()
     };
     
@@ -259,8 +295,11 @@ const createAppointment = async (event, corsHeaders) => {
               email: newAppointment.email,
               date: newAppointment.date.toISOString(),
               type: newAppointment.type,
+              status: newAppointment.status,
               comments: newAppointment.comments,
               location: newAppointment.location,
+              totalAmount: newAppointment.totalAmount,
+              balanceDue: newAppointment.balanceDue,
               createdAt: newAppointment.createdAt.toISOString()
             }
           }
@@ -313,7 +352,7 @@ const updateAppointment = async (event, corsHeaders) => {
     }
 
     // Extract fields
-    const { id, email, date, type, comments, location } = requestBody;
+    const { id, email, date, type, status, comments, location, totalAmount, balanceDue } = requestBody;
     
     if (!id) {
       return {
@@ -353,11 +392,39 @@ const updateAppointment = async (event, corsHeaders) => {
     if (type) {
       updateData.type = type.trim();
     }
+    if (status !== undefined) {
+      const statusTrimmed = status.trim();
+      if (!APPOINTMENT_STATUSES.includes(statusTrimmed)) {
+        return {
+          statusCode: 400,
+          headers: corsHeaders,
+          body: JSON.stringify({
+            success: false,
+            message: `Invalid status. Allowed: ${APPOINTMENT_STATUSES.join(', ')}`
+          })
+        };
+      }
+      updateData.status = statusTrimmed;
+    }
     if (comments !== undefined) {
       updateData.comments = comments.trim();
     }
     if (location !== undefined) {
       updateData.location = location.trim();
+    }
+    if (totalAmount !== undefined) {
+      const parsed = parseCurrency(totalAmount, 'totalAmount');
+      if (parsed.error) {
+        return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ success: false, message: parsed.error }) };
+      }
+      updateData.totalAmount = parsed.value;
+    }
+    if (balanceDue !== undefined) {
+      const parsed = parseCurrency(balanceDue, 'balanceDue');
+      if (parsed.error) {
+        return { statusCode: 400, headers: corsHeaders, body: JSON.stringify({ success: false, message: parsed.error }) };
+      }
+      updateData.balanceDue = parsed.value;
     }
     
     // Update appointment
@@ -393,8 +460,11 @@ const updateAppointment = async (event, corsHeaders) => {
               email: updatedAppointment.email,
               date: updatedAppointment.date.toISOString(),
               type: updatedAppointment.type,
+              status: updatedAppointment.status ?? DEFAULT_STATUS,
               comments: updatedAppointment.comments,
               location: updatedAppointment.location,
+              totalAmount: updatedAppointment.totalAmount ?? 0,
+              balanceDue: updatedAppointment.balanceDue ?? 0,
               createdAt: updatedAppointment.createdAt,
               updatedAt: updatedAppointment.updatedAt
             }
@@ -495,6 +565,21 @@ const deleteAppointment = async (event, corsHeaders) => {
       })
     };
   }
+};
+
+// Parse and validate currency (number or string); returns { value, error }
+const parseCurrency = (input, fieldName) => {
+  if (input === undefined || input === null) {
+    return { value: 0, error: null };
+  }
+  const num = typeof input === 'string' ? parseFloat(input) : Number(input);
+  if (Number.isNaN(num)) {
+    return { value: null, error: `Invalid ${fieldName}: must be a number` };
+  }
+  if (num < 0) {
+    return { value: null, error: `${fieldName} must be greater than or equal to 0` };
+  }
+  return { value: Math.round(num * 100) / 100, error: null };
 };
 
 // Token validation function - Same as ASAUTH

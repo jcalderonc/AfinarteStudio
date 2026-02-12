@@ -8,8 +8,11 @@ const testAppointment = {
   email: 'test.appointment@afinartestudio.com',
   date: '2025-12-25T10:00:00.000Z',
   type: 'Coro',
+  status: 'Confirmado',
   comments: 'Prueba de appointment',
-  location: 'Iglesia de Prueba'
+  location: 'Iglesia de Prueba',
+  totalAmount: 150.5,
+  balanceDue: 75.25
 };
 
 // Test 1: OPTIONS request
